@@ -1,6 +1,9 @@
 install requirements: 
 `pip install -r requirements.txt`
 
+make migrates:
+`python manage.py migrate`
+
 run project:
 `python manage.py runserver`
 
