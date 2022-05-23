@@ -14,6 +14,8 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.urls import path
+from django.conf import settings
+from django.conf.urls.static import static
 
 from MainApp import views
 
@@ -21,5 +23,5 @@ urlpatterns = [
     path('', views.index_page),
     path('snippets/add', views.add_snippet_page),
     path('snippets/list', views.snippets_page),
-]
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
