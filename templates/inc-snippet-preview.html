@@ -1,4 +1,4 @@
 <td scope="row">{{ snippet.id }}</td>
-<td><a href="/snippets/{{ ... }}">{{ snippet.name }}</a></td>
+<td><a href="{% url 'page-snippet' snippet.id %}">{{ snippet.name }}</a></td>
 <td>{{ snippet.creation_date }}</td>
 <td>{{ snippet.lang }}</td>

@@ -19,3 +19,11 @@ def snippets_page(request):
         'snippets': Snippet.objects.all(),
     }
     return render(request, 'pages/view_snippets.html', context)
+
+
+def snippet_page(request, id):
+    context = {
+        'pagename': 'Страница сниппета',
+        'snippet': Snippet.objects.get(pk=id),
+    }
+    return render(request, 'pages/page_snippet.html', context)
