@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load tz %}
 
 {% block main %}
 <div class="container">
@@ -18,7 +19,8 @@
                Язык: <input type="text" value="{{ snippet.lang }}" class="form-control">
            </div>
            <div class="col col-3">
-               Дата создания: <input type="text" value="{{ snippet.creation_date }}" class="form-control">
+               Дата создания:
+               <input type="text" value="{{ snippet.creation_date|timezone:USER_TZ }}" class="form-control">
            </div>
        </div>
        <hr>
