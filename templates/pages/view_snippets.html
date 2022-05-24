@@ -10,16 +10,30 @@
     </div>
 
     <div class="row">
-        <div class="col">
-            <p>На данной страницы будут отображаться все созданные сниппеты.</p>
-            <p>Пока тут пусто, скоро мы это исправим!</p>
-            <hr>
-        </div>
-    </div>
-
-    <div class="row">
         <div class="col-4 offset-2">
             Список сниппетов:
+            <div class="col">
+               <table class="table table-striped">
+                   <thead class="thead-dark">
+                   <tr>
+                       <th scope="col">ID</th>
+                       <th scope="col">Название</th>
+                       <th scope="col">Дата создания</th>
+                       <th scope="col">Язык</th>
+                   </tr>
+                   </thead>
+                   <tbody>
+                   {% for snippet in snippets %}
+                       <tr>
+                           {% include 'inc-snippet-preview.html' %}
+                       </tr>
+                   {% endfor %}
+                   </tbody>
+               </table>
+               <div align="right">
+                   <i style="color: gray;">Всего сниппетов: {{ snippets.count }}</i>
+               </div>
+            </div>
         </div>
     </div>
 </div>
