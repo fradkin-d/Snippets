@@ -43,7 +43,7 @@ def snippet_page(request, id):
     return render(request, 'pages/page_snippet.html', context)
 
 
-def login_page(request):
+def login(request):
     if request.method == 'POST':
         username = request.POST.get("username")
         password = request.POST.get("password")
@@ -53,4 +53,9 @@ def login_page(request):
         else:
             # Return error message
             pass
+    return redirect('home')
+
+
+def logout(request):
+    auth.logout(request)
     return redirect('home')
