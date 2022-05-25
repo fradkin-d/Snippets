@@ -13,26 +13,32 @@
         <div class="col-8 offset-2">
             Список сниппетов:
             <div class="col">
-               <table class="table table-striped">
-                   <thead class="thead-dark">
-                   <tr>
-                       <th scope="col">ID</th>
-                       <th scope="col">Название</th>
-                       <th scope="col">Дата создания</th>
-                       <th scope="col">Язык</th>
-                   </tr>
-                   </thead>
-                   <tbody>
-                   {% for snippet in snippets %}
-                       <tr>
-                           {% include 'inc-snippet-preview.html' %}
-                       </tr>
-                   {% endfor %}
-                   </tbody>
-               </table>
-               <div align="right">
-                   <i style="color: gray;">Всего сниппетов: {{ snippets.count }}</i>
-               </div>
+                <table class="table table-striped">
+                    <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Название</th>
+                        <th scope="col">Дата создания</th>
+                        <th scope="col">Язык</th>
+                        <th scope="col">Автор</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for snippet in snippets %}
+                    <tr>
+                        {% load tz %}
+                        <td scope="row">{{ snippet.id }}</td>
+                        <td><a href="{% url 'page-snippet' snippet.id %}">{{ snippet.name }}</a></td>
+                        <td>{{ snippet.creation_date|timezone:USER_TZ }}</td>
+                        <td>{{ snippet.lang }}</td>
+                        <td>{{ snippet.user|default:'Неизвестно' }}</td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                <div align="right">
+                    <i style="color: gray;">Всего сниппетов: {{ snippets.count }}</i>
+                </div>
             </div>
         </div>
     </div>

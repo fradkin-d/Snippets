@@ -21,7 +21,9 @@ def add_snippet_page(request):
     if request.method == 'POST':
         form = SnippetForm(request.POST)
         if form.is_valid():
-            form.save()
+            snippet = form.save(commit=False)
+            snippet.user = request.user
+            snippet.save()
             return redirect("list-snippets")
 
 
@@ -64,13 +66,12 @@ def logout(request):
 def register(request):
     if request.method == 'GET':
         form = UserRegistrationForm()
-        context = {
-            'pagename': 'Регистрация пользователя',
-            'form': form,
-        }
+        context = {'pagename': 'Регистрация пользователя', 'form': form}
         return render(request, 'pages/registration.html', context)
     if request.method == 'POST':
         form = UserRegistrationForm(request.POST)
         if form.is_valid():
             form.save()
             return redirect("home")
+        context = {'pagename': 'Регистрация пользователя', 'form': form}
+        return render(request, 'pages/registration.html', context)

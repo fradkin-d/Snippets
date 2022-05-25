@@ -1,6 +1,0 @@
-{% load tz %}
-
-<td scope="row">{{ snippet.id }}</td>
-<td><a href="{% url 'page-snippet' snippet.id %}">{{ snippet.name }}</a></td>
-<td>{{ snippet.creation_date|timezone:USER_TZ }}</td>
-<td>{{ snippet.lang }}</td>
