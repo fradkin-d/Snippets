@@ -1,5 +1,5 @@
 from django.forms import ModelForm, TextInput, Select, Textarea, CheckboxInput, CharField, PasswordInput, ValidationError
-from MainApp.models import Snippet
+from MainApp.models import Snippet, Comment
 from django.contrib.auth.models import User
 
 
@@ -36,3 +36,13 @@ class UserRegistrationForm(ModelForm):
         if commit:
             user.save()
         return user
+
+
+class CommentForm(ModelForm):
+    class Meta:
+        model = Comment
+        fields = ['text']
+        widgets = {
+            'text': TextInput(attrs={"class": "form-control form-control-lg",
+                                     'placeholder': 'Ваш комментарий ...'})
+        }

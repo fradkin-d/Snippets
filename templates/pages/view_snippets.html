@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 {% load tz %}
+{% load static %}
+
 {% block main %}
 <div class="container">
     <div class="row">
@@ -38,10 +40,14 @@
                         <td>{{ snippet.lang }}</td>
                         <td>{{ snippet.user|default:'Неизвестно' }}</td>
                         {% if edit %}
-                        <td><a href="{% url 'edit-snippet' snippet.id %}">M</a></td>
+                        <td><a href="{% url 'edit-snippet' snippet.id %}">
+                            <img src="{% static 'images/edit.png' %}">
+                        </a></td>
                         {% endif %}
                         {% if delete %}
-                        <td><a href="{% url 'delete-snippet' snippet.id %}">D</a></td>
+                        <td><a href="{% url 'delete-snippet' snippet.id %}">
+                            <img src="{% static 'images/delete.png' %}">
+                        </a></td>
                         {% endif %}
                     </tr>
                     {% endfor %}

@@ -2,7 +2,7 @@ from django.http import Http404
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from MainApp.models import Snippet
-from MainApp.forms import SnippetForm, UserRegistrationForm
+from MainApp.forms import SnippetForm, UserRegistrationForm, CommentForm
 from django.contrib import auth
 
 
@@ -79,9 +79,13 @@ def my_snippets_list(request):
 
 
 def snippet_page(request, id):
+    snippet = Snippet.objects.get(pk=id)
+    comment_form = CommentForm()
     context = {
         'pagename': 'Страница сниппета',
-        'snippet': Snippet.objects.get(pk=id),
+        'snippet': snippet,
+        'comment_form': comment_form,
+        'comments': snippet.comments.all(),
         'USER_TZ': 'Europe/Moscow',
     }
     return render(request, 'pages/page_snippet.html', context)
@@ -117,3 +121,15 @@ def register(request):
             return redirect("home")
         context = {'pagename': 'Регистрация пользователя', 'form': form}
         return render(request, 'pages/registration.html', context)
+
+
+def comment_add(request):
+    if request.method == 'POST':
+        comment_form = CommentForm(request.POST)
+        if comment_form.is_valid():
+            comment = comment_form.save(commit=False)
+            comment.author = request.user
+            comment.snippet = Snippet.objects.get(pk=request.POST.get('snippet_id'))
+            comment.save()
+        return redirect(request.META.get('HTTP_REFERER', '/'))
+    return Http404
