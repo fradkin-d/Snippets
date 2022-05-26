@@ -47,6 +47,14 @@ def edit_snippet_page(request, id):
         return redirect("my-snippets")
 
 
+@login_required
+def delete_snippet(request, id):
+    snippet = Snippet.objects.get(pk=id)
+    if snippet.user == request.user:
+        snippet.delete()
+    return redirect("my-snippets")
+
+
 def snippets_list(request):
     context = {
         'pagename': 'Просмотр сниппетов',
