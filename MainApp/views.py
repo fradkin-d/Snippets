@@ -1,4 +1,5 @@
 from django.http import Http404
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from MainApp.models import Snippet
 from MainApp.forms import SnippetForm, UserRegistrationForm
@@ -24,14 +25,47 @@ def add_snippet_page(request):
             snippet = form.save(commit=False)
             snippet.user = request.user
             snippet.save()
-            return redirect("list-snippets")
+            return redirect("my-snippets")
+
+
+def edit_snippet_page(request, id):
+    snippet = Snippet.objects.get(pk=id)
+    if request.method == 'GET':
+        form = SnippetForm(instance=snippet)
+        context = {
+            'pagename': 'Редактирование сниппета',
+            'form': form,
+        }
+        return render(request, 'pages/edit_snippet.html', context)
+    if request.method == 'POST':
+
+        snippet.name = request.POST.get('name')
+        snippet.lang = request.POST.get('lang')
+        snippet.code = request.POST.get('code')
+        snippet.is_public = request.POST.get('is_public') == 'on'
+        snippet.save()
+        return redirect("my-snippets")
 
 
 def snippets_list(request):
     context = {
         'pagename': 'Просмотр сниппетов',
-        'snippets': Snippet.objects.all(),
+        'snippets': Snippet.objects.filter(is_public=True),
         'USER_TZ': 'Europe/Moscow',
+        'edit': False,
+        'delete': False,
+    }
+    return render(request, 'pages/view_snippets.html', context)
+
+
+@login_required
+def my_snippets_list(request):
+    context = {
+        'pagename': 'Просмотр сниппетов',
+        'snippets': Snippet.objects.filter(user=request.user),
+        'USER_TZ': 'Europe/Moscow',
+        'edit': True,
+        'delete': True,
     }
     return render(request, 'pages/view_snippets.html', context)
 

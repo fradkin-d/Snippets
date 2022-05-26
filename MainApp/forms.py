@@ -1,4 +1,4 @@
-from django.forms import ModelForm, TextInput, Textarea, CharField, PasswordInput, ValidationError
+from django.forms import ModelForm, TextInput, Select, Textarea, CheckboxInput, CharField, PasswordInput, ValidationError
 from MainApp.models import Snippet
 from django.contrib.auth.models import User
 
@@ -6,9 +6,12 @@ from django.contrib.auth.models import User
 class SnippetForm(ModelForm):
     class Meta:
         model = Snippet
-        fields = ['name', 'lang', 'code']
+        fields = ['name', 'lang', 'code', 'is_public']
         widgets = {
-            'name': TextInput(attrs={"class": "form-control form-control-lg", 'placeholder': 'Название сниппета'}),
+            'name': TextInput(attrs={"class": "form-control form-control-lg",
+                                     'placeholder': 'Дайте имя сниппету ...'}),
+            'lang': Select(attrs={"class": "form-control form-control-lg"}),
+            'code': Textarea(attrs={"class": "form-control form-control-lg", 'placeholder': 'Поместите код сюда ...'}),
         }
 
 

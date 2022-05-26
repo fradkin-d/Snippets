@@ -46,18 +46,26 @@
                     aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
+            {% if request.user.is_authenticated %}
             <div class="collapse navbar-collapse" id="navbarCollapse">
                 <ul class="navbar-nav mr-auto">
+                    <li class="form-inline"><a class="btn btn-outline-info" href="{% url 'list-snippets' %}">Посмотреть
+                        сниппеты</a></li>
+                    <li class="form-inline"><a class="btn btn-outline-info" href="{% url 'my-snippets' %}">Мои
+                        сниппеты</a></li>
                     <li class="form-inline"><a class="btn btn-outline-secondary" href="{% url 'add-snippet' %}">Добавить
                         сниппет</a></li>
+                </ul>
+            </div>
+            <span style="color: white;">Welcome, {{request.user.username }}!</span>
+            <a href="{% url 'logout' %}">SignOut</a>
+            {% else %}
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+                <ul class="navbar-nav mr-auto">
                     <li class="form-inline"><a class="btn btn-outline-info" href="{% url 'list-snippets' %}">Посмотреть
                         сниппеты</a></li>
                 </ul>
             </div>
-            {% if request.user.is_authenticated %}
-            <span style="color: white;">Welcome, {{request.user.username }}!</span>
-            <a href="{% url 'logout' %}">SignOut</a>
-            {% else %}
             <form method="post" action="{% url 'login' %}">{% csrf_token %}
                 <input name="username" type="text" placeholder="username">
                 <input name="password" type="password" placeholder="password">

@@ -22,8 +22,9 @@ from MainApp import views
 urlpatterns = [
     path('', views.index_page, name='home'),
     path('snippets/add', views.add_snippet_page, name='add-snippet'),
-    # path('snippets/edit/<int:id>', views.edit_snippet_page, name='edit-snippet'),
+    path('snippet/<int:id>/edit', views.edit_snippet_page, name='edit-snippet'),
     path('snippets/list', views.snippets_list, name='list-snippets'),
+    path('snippets/my', views.my_snippets_list, name='my-snippets'),
     path('snippet/<int:id>', views.snippet_page, name='page-snippet'),
     path('login', views.login, name='login'),
     path('logout', views.logout, name='logout'),

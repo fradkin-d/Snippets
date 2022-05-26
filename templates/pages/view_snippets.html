@@ -21,6 +21,8 @@
                         <th scope="col">Дата создания</th>
                         <th scope="col">Язык</th>
                         <th scope="col">Автор</th>
+                        {% if edit %}<th></th>{% endif %}
+                        {% if delete %}<th></th>{% endif %}
                     </tr>
                     </thead>
                     <tbody>
@@ -32,6 +34,8 @@
                         <td>{{ snippet.creation_date|timezone:USER_TZ }}</td>
                         <td>{{ snippet.lang }}</td>
                         <td>{{ snippet.user|default:'Неизвестно' }}</td>
+                        {% if edit %}<td><a href="{% url 'edit-snippet' snippet.id %}">M</a></td>{% endif %}
+                        {% if delete %}<td><a href="{# {% url 'delete-snippet' snippet.id %} #}">D</a></td>{% endif %}
                     </tr>
                     {% endfor %}
                     </tbody>
