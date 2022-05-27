@@ -4,6 +4,7 @@ from django.shortcuts import render, redirect
 from MainApp.models import Snippet, LANGS
 from MainApp.forms import SnippetForm, UserRegistrationForm, CommentForm
 from django.core.exceptions import ObjectDoesNotExist
+from django.contrib import messages, auth
 
 
 def index_page(request):
@@ -112,6 +113,8 @@ def snippet_find(request):
         snippet = Snippet.objects.get(pk=id)
         return redirect('page-snippet', id)
     except ObjectDoesNotExist:
+        return redirect('home')
+    except ValueError:
         return redirect('home')
 
 
