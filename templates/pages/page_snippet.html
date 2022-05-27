@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load tz %}
+{% load my_tags %}
 
 {% block main %}
 <div class="container">
@@ -29,7 +30,7 @@
         <div class="col">
             <div class="p-2 h-100" style="border:1px solid #ced4da; border-radius:5px; margin-top:10px;">
                 <p>
-                    {{ snippet.code }}
+                    {{ snippet.code|n_to_br|safe }}
                 </p>
             </div>
         </div>
