@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from MainApp.models import Snippet, LANGS
 from MainApp.forms import SnippetForm, UserRegistrationForm, CommentForm
-from django.contrib import auth
+from django.core.exceptions import ObjectDoesNotExist
 
 
 def index_page(request):
@@ -93,7 +93,7 @@ def add_snippet_page(request):
             return redirect("my-snippets")
 
 
-def snippet_page(request, id):
+def snippet_page(request, id=None):
     snippet = Snippet.objects.get(pk=id)
     comment_form = CommentForm()
     context = {
@@ -104,6 +104,15 @@ def snippet_page(request, id):
         'USER_TZ': 'Europe/Moscow',
     }
     return render(request, 'pages/page_snippet.html', context)
+
+
+def snippet_find(request):
+    id = request.POST.get('snippet_id')
+    try:
+        snippet = Snippet.objects.get(pk=id)
+        return redirect('page-snippet', id)
+    except ObjectDoesNotExist:
+        return redirect('home')
 
 
 def edit_snippet_page(request, id):
