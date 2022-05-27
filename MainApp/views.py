@@ -1,7 +1,7 @@
 from django.http import Http404
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
-from MainApp.models import Snippet
+from MainApp.models import Snippet, LANGS
 from MainApp.forms import SnippetForm, UserRegistrationForm, CommentForm
 from django.contrib import auth
 
@@ -45,24 +45,34 @@ def register(request):
 
 def snippets_list(request):
     context = {
-        'pagename': 'Просмотр сниппетов',
+        'pagename': 'Публичные сниппеты',
         'snippets': Snippet.objects.filter(is_public=True),
         'USER_TZ': 'Europe/Moscow',
-        'edit': False,
-        'delete': False,
+        'langs': [('all', 'Все')] + LANGS,
+        'lang_filter': 'all',
     }
+    if request.method == 'POST':
+        print(request.POST)
+        context.update({
+            'lang_filter': request.POST.get('lang_filter')
+        })
     return render(request, 'pages/view_snippets.html', context)
 
 
 @login_required
 def my_snippets_list(request):
     context = {
-        'pagename': 'Просмотр сниппетов',
+        'pagename': 'Мои сниппеты',
         'snippets': Snippet.objects.filter(user=request.user),
         'USER_TZ': 'Europe/Moscow',
-        'edit': True,
-        'delete': True,
+        'langs': [('all', 'Все')] + LANGS,
+        'lang_filter': 'all',
     }
+    if request.method == 'POST':
+        print(request.POST)
+        context.update({
+            'lang_filter': request.POST.get('lang_filter')
+        })
     return render(request, 'pages/view_snippets.html', context)
 
 
@@ -73,7 +83,7 @@ def add_snippet_page(request):
             'pagename': 'Добавление нового сниппета',
             'form': form,
         }
-        return render(request, 'pages/add_snippet.html', context)
+        return render(request, 'pages/edit_snippet.html', context)
     if request.method == 'POST':
         form = SnippetForm(request.POST)
         if form.is_valid():

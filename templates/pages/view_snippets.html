@@ -14,49 +14,82 @@
 
     <div class="row">
         <div class="col-8 offset-2">
-            Список сниппетов:
-            <div class="col">
-                <table class="table table-striped">
-                    <thead class="thead-dark">
+            Фильтры:
+            <table>
+                <thead>
+                <tr>
+                    <th>Язык:</th>
+                </tr>
+                </thead>
+                <tbody>
+                <form action="" method="post">
+                    {% csrf_token %}
                     <tr>
-                        <th scope="col">ID</th>
-                        <th scope="col">Название</th>
-                        <th scope="col">Дата создания</th>
-                        <th scope="col">Язык</th>
-                        <th scope="col">Автор</th>
-                        {% if edit %}
-                        <th></th>
-                        {% endif %}
-                        {% if delete %}
-                        <th></th>
-                        {% endif %}
+                        <td>
+                            <select name="lang_filter">
+                                {% for lang in langs %}
+                                <option {% if lang_filter == lang.0 %}
+                                        selected
+                                        {% endif %} value="{{ lang.0 }}">{{ lang.1 }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </td>
                     </tr>
-                    </thead>
-                    <tbody>
-                    {% for snippet in snippets %}
                     <tr>
-                        <td scope="row">{{ snippet.id }}</td>
-                        <td><a href="{% url 'page-snippet' snippet.id %}">{{ snippet.name }}</a></td>
-                        <td>{{ snippet.creation_date|timezone:USER_TZ }}</td>
-                        <td>{{ snippet.lang }}</td>
-                        <td>{{ snippet.user|is_empty:'Неизвестно' }}</td>
-                        {% if edit %}
-                        <td><a href="{% url 'edit-snippet' snippet.id %}">
+                        <td>
+                            <input type="submit" class="btn btn-primary btn-block" value="Применить">
+                        </td>
+                    </tr>
+                </form>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-8 offset-2">
+            <table class="table table-striped">
+                <thead class="thead-dark">
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Название</th>
+                    <th scope="col">Дата создания</th>
+                    <th scope="col">Язык</th>
+                    <th scope="col">Автор</th>
+                    <th scope="col"></th>
+                    <th scope="col"></th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for snippet in snippets %}
+                {% if snippet.lang == lang_filter or lang_filter == 'all' %}
+                <tr>
+                    <td scope="row">{{ snippet.id }}</td>
+                    <td><a href="{% url 'page-snippet' snippet.id %}">{{ snippet.name }}</a></td>
+                    <td>{{ snippet.creation_date|timezone:USER_TZ }}</td>
+                    <td>{{ snippet.lang }}</td>
+                    <td>{{ snippet.user|is_empty:'Неизвестно' }}</td>
+                    {% if snippet.user == request.user %}
+                    <td>
+                        <a href="{% url 'edit-snippet' snippet.id %}">
                             <img src="{% static 'images/edit.png' %}">
-                        </a></td>
-                        {% endif %}
-                        {% if delete %}
-                        <td><a href="{% url 'delete-snippet' snippet.id %}">
+                        </a>
+                    </td>
+                    <td>
+                        <a href="{% url 'delete-snippet' snippet.id %}">
                             <img src="{% static 'images/delete.png' %}">
-                        </a></td>
-                        {% endif %}
-                    </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
-                <div align="right">
-                    <i style="color: gray;">Всего сниппетов: {{ snippets.count }}</i>
-                </div>
+                        </a>
+                    </td>
+                    {% else %} <td></td><td></td>
+                    {% endif %}
+                </tr>
+                {% endif %}
+                {% endfor %}
+                </tbody>
+            </table>
+            <div align="right">
+                <i style="color: gray;">Всего сниппетов: {{ snippets.count }}</i>
             </div>
         </div>
     </div>
